@@ -28,4 +28,4 @@ npm run build
 ```
 
 ## Trước production
-Cấu hình secret qua dashboard host; xác minh TLS và backup PostgreSQL; bật HTTPS; bổ sung rate limit dùng chung cho nhiều instance, audit/logging/alerting; thêm OIDC/passkeys nếu có nhiều người dùng; thêm approval workflow và sandbox riêng trước khi mở skill có tác động. DATABASE_SSL=true hiện dùng rejectUnauthorized:false, cần thay bằng CA validation phù hợp trước production. Chưa deploy trong PR này.
+Cấu hình secret qua dashboard host; xác minh TLS và backup PostgreSQL; bật HTTPS; bổ sung rate limit dùng chung cho nhiều instance, audit/logging/alerting; thêm OIDC/passkeys nếu có nhiều người dùng; thêm approval workflow và sandbox riêng trước khi mở skill có tác động. DATABASE_SSL=true bật TLS với kiểm tra chứng chỉ theo CA tin cậy của runtime. Chưa deploy trong PR này.
