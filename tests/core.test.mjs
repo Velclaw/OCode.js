@@ -27,6 +27,12 @@ test("object helpers do not mutate inputs", () => {
   assert.equal(getPath(input, "nested.left"), true);
   assert.equal(getPath(input, "nested.missing", "fallback"), "fallback");
   assert.deepEqual(cloneJson(input), input);
+
+  const malicious = JSON.parse('{"__proto__":{"polluted":true}}');
+  const merged = deepMerge({}, malicious);
+  assert.equal(Object.getPrototypeOf(merged), Object.prototype);
+  assert.equal(Object.prototype.hasOwnProperty.call(merged, "__proto__"), true);
+  assert.equal(Object.prototype.polluted, undefined);
 });
 test("async helpers retry, dedupe and time out", async () => {
   let count = 0;
