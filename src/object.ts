@@ -4,17 +4,24 @@ export function isPlainObject(value: unknown): value is PlainRecord {
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
 }
+function defineOwn(target: object, key: PropertyKey, value: unknown): void {
+  Object.defineProperty(target, key, { value, enumerable: true, configurable: true, writable: true });
+}
 /** Pick own enumerable properties from an object. */
 export function pick<T extends object, K extends keyof T>(value: T, keys: readonly K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
-  for (const key of keys) if (Object.prototype.propertyIsEnumerable.call(value, key)) result[key] = value[key];
+  for (const key of keys) {
+    if (Object.prototype.propertyIsEnumerable.call(value, key)) defineOwn(result, key, value[key]);
+  }
   return result;
 }
 /** Omit selected own enumerable properties from an object. */
 export function omit<T extends object, K extends keyof T>(value: T, keys: readonly K[]): Omit<T, K> {
   const excluded = new Set<PropertyKey>(keys);
   const result: Record<string, unknown> = {};
-  for (const key of Object.keys(value)) if (!excluded.has(key)) result[key] = (value as Record<string, unknown>)[key];
+  for (const key of Object.keys(value)) {
+    if (!excluded.has(key)) defineOwn(result, key, (value as Record<string, unknown>)[key]);
+  }
   return result as Omit<T, K>;
 }
 /** Recursively merge plain objects; arrays and other values are replaced. */
@@ -25,7 +32,7 @@ export function deepMerge<T extends PlainRecord, U extends PlainRecord>(target: 
       ? deepMerge(result[key] as PlainRecord, value)
       : value;
     // Define an own data property so a JSON "__proto__" key cannot mutate the result prototype.
-    Object.defineProperty(result, key, { value: merged, enumerable: true, configurable: true, writable: true });
+    defineOwn(result, key, merged);
   }
   return result as T & U;
 }
