@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { generateCompletion } from "../lib/ai/openai-compatible";
 
-const keys = ["AI_API_KEY", "AI_MODEL", "AI_BASE_URL", "AI_PROVIDER", "NODE_ENV"] as const;
+const keys = ["AI_API_KEY", "AI_MODEL", "AI_BASE_URL", "AI_PROVIDER"] as const;
 const saved = Object.fromEntries(keys.map(key => [key, process.env[key]]));
 function restore() { for (const key of keys) { const value = saved[key]; if (value === undefined) delete process.env[key]; else process.env[key] = value; } }
-function configure() { process.env.AI_API_KEY = "test-secret"; process.env.AI_MODEL = "test-model"; process.env.AI_BASE_URL = "https://provider.example/v1"; process.env.AI_PROVIDER = "test"; process.env.NODE_ENV = "test"; }
+function configure() { process.env.AI_API_KEY = "test-secret"; process.env.AI_MODEL = "test-model"; process.env.AI_BASE_URL = "https://provider.example/v1"; process.env.AI_PROVIDER = "test"; }
 
 test("returns null when provider configuration is absent", async () => {
   try { delete process.env.AI_API_KEY; delete process.env.AI_MODEL; delete process.env.AI_BASE_URL; assert.equal(await generateCompletion("hello"), null); } finally { restore(); }
