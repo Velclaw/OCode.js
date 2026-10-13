@@ -22,19 +22,25 @@ This plan is documentation only. It does not create, edit, restart, or deploy Re
 - [ ] Confirm a free plan supports the required web and worker processes for this workspace; if not, stop rather than select a paid tier.
 - [ ] Confirm a dedicated, approved PostgreSQL target and backup/restore process.
 - [ ] Confirm the exact staging origin so `APP_ORIGIN` can be set before first login.
-- [ ] Confirm login rate limiting is suitable for public exposure.
-- [ ] Confirm worker crash recovery/leases are implemented or document manual recovery for staging.
-- [ ] Confirm CSRF/origin protection and automated tests pass in CI.
+- [ ] Replace process-local login throttling with a shared rate-limit strategy and define which proxy headers are trusted before exposing the service publicly.
+- [ ] Understand the worker's best-effort recovery behavior: it refreshes `updated_at` every 60 seconds and requeues `running` tasks older than five minutes, but this is not a distributed lease and may allow duplicate execution after a long stall.
+- [ ] Confirm Origin protection is enabled for both login and chat mutation endpoints and automated tests pass in CI.
 - [ ] Obtain explicit approval before creating a service/database or triggering a deployment.
 
 ## Smoke test after separate approval
 
-- `GET /api/health` returns HTTP 200 and reports PostgreSQL mode.
-- Login works over HTTPS; session cookie is HttpOnly and Secure.
-- Requests with missing or mismatched Origin are rejected for chat mutations.
+- `GET /api/health` returns HTTP 200 and reports PostgreSQL mode. This does not confirm the worker is alive; inspect worker logs separately.
+- Login works over HTTPS; the session cookie is HttpOnly and Secure.
+- Login and chat mutation requests with missing or mismatched Origin are rejected.
 - Submit `/status`; confirm the worker completes the task and chat history persists after a web/worker restart.
+- Restart the worker during a queued/running task and verify the documented best-effort recovery behavior without assuming exactly-once execution.
 - Verify logs do not contain secrets. Test backup restoration before any migration.
 
 ## Current limitations
 
-The MVP does not yet provide distributed rate limiting or automatic recovery for tasks stranded in `running` after a worker crash. A healthy database response does not prove the worker is alive. Do not advertise this staging plan as a deployed service.
+- No LLM provider is connected; skills are deterministic demo behavior (`/status`, `/echo`, and a draft-plan fallback).
+- Login rate limiting remains process-local and currently keys on the first `X-Forwarded-For` value. Do not treat this as adequate public abuse protection until trusted-proxy handling and shared rate limiting are addressed.
+- Task recovery is best-effort rather than a distributed lease; a healthy database response does not prove the worker is alive.
+- The in-memory store is demo-only and is not shared across service instances.
+
+Do not advertise this plan as a deployed service. Provisioning, secrets, database attachment, and deployment each require separate explicit approval.
