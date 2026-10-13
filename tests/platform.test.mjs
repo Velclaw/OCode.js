@@ -35,6 +35,12 @@ test("HTTP helpers build JSON requests and report failures", async () => {
     globalThis.fetch = async () => new Response("server failure", { status: 503, statusText: "Unavailable" });
     await assert.rejects(fetchJson("https://example.test"), /HTTP 503 Unavailable: server failure/);
 
+    globalThis.fetch = async () => new Response(JSON.stringify({ error: "maintenance" }), { status: 503 });
+    assert.deepEqual(
+      await fetchJson("https://example.test", { throwOnHttpError: false }),
+      { error: "maintenance" }
+    );
+
     globalThis.fetch = async () => new Response("not json", { status: 200 });
     await assert.rejects(fetchJson("https://example.test"), /not valid JSON/);
   } finally {
