@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Velclaw Cloud Agent API
+  version: 0.1.0
+  description: Authenticated mobile chat and allowlisted task API.
+servers:
+  - url: /
+paths:
+  /api/auth/login:
+    post:
+      summary: Create signed admin session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [password], properties: { password: { type: string, minLength: 1 } } }
+      responses: { "200": { description: HttpOnly cookie set }, "401": { description: Invalid password }, "429": { description: Rate limit reached }, "503": { description: Missing configuration } }
+  /api/auth/logout:
+    post:
+      summary: Clear session cookie
+      responses: { "200": { description: Session cleared } }
+  /api/auth/session:
+    get:
+      summary: Check current session
+      responses: { "200": { description: Session status } }
+  /api/chat:
+    get:
+      summary: List recent messages
+      security: [{ cookieSession: [] }]
+      responses: { "200": { description: Recent messages }, "401": { description: Authentication required } }
+    post:
+      summary: Submit a message and enqueue an allowlisted skill
+      security: [{ cookieSession: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, required: [text], properties: { text: { type: string, minLength: 1, maxLength: 4000 } } }
+      responses: { "202": { description: Task queued or completed in local demo mode }, "400": { description: Invalid request }, "401": { description: Authentication required }, "413": { description: Message too long }, "503": { description: Store unavailable } }
+  /api/tasks/{id}:
+    get:
+      summary: Read task status
+      security: [{ cookieSession: [] }]
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string, format: uuid } }
+      responses: { "200": { description: Task status and result }, "401": { description: Authentication required }, "404": { description: Task not found } }
+  /api/health:
+    get:
+      summary: Non-sensitive health status
+      responses: { "200": { description: Persistent database available }, "503": { description: Database unavailable or demo-only mode } }
+components:
+  securitySchemes:
+    cookieSession: { type: apiKey, in: cookie, name: ocode_cloud_agent_session }

@@ -1,0 +1,1 @@
+{"id":"/","name":"Velclaw Cloud Agent","short_name":"Cloud Agent","description":"Điều khiển agent cloud an toàn qua chat.","start_url":"/","scope":"/","display":"standalone","background_color":"#0d1017","theme_color":"#10131c","orientation":"portrait-primary","icons":[{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
