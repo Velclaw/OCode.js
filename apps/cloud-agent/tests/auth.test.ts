@@ -7,7 +7,7 @@ process.env.SESSION_SECRET="test-only-session-secret-with-more-than-32-character
 
 test("accepts a valid signed GitHub session token",()=>{
   const now=1_800_000_000_000;
-  const token=createSessionToken(now,"zskbot");
+  const token=createSessionToken("zskbot",now);
   assert.equal(verifySessionToken(token,now),true);
   assert.equal(getSessionLogin(token,now),"zskbot");
 });
