@@ -1,6 +1,6 @@
 # OCode.js API Reference
 
-OCode.js is a dependency-free JavaScript/TypeScript utility library. It is published as ESM with TypeScript declaration files. Examples below assume Node.js 18+ or a compatible modern browser runtime.
+OCode.js is a dependency-free JavaScript/TypeScript utility library distributed as ESM with TypeScript declaration files. Examples assume Node.js 18+ or a compatible modern browser runtime.
 
 ## Importing
 
@@ -33,10 +33,10 @@ Treat untrusted object keys and values carefully at application boundaries; thes
 
 ## Async — `ocode-js/async`
 
-- `sleep(ms, options?)`: wait for a duration; supports abort signals.
-- `retry(operation, options?)`: retry a failing async operation with configurable attempts and delay/backoff.
-- `dedupeAsync(operation)`: coalesce overlapping calls so they share the same in-flight result.
-- `withTimeout(promise, ms)`: reject when the time limit is exceeded. A timeout does not necessarily cancel the underlying operation.
+- `sleep(ms, signal?)`: wait for a finite, non-negative duration; an optional `AbortSignal` can cancel the wait.
+- `retry(operation, options?)`: retry an async operation. Options are `attempts` (integer >= 1), `delayMs` (finite >= 0), `factor` (finite >= 1), `maxDelayMs` (finite >= 0), and `shouldRetry(error, attempt)`.
+- `dedupeAsync(operation)`: coalesce overlapping calls so they share the same in-flight result. Calls made while pending share the first call's arguments and result.
+- `withTimeout(promise, ms, message?)`: reject when the time limit is exceeded. A timeout does not necessarily cancel the underlying operation.
 
 Use retries only for operations that are safe to repeat, or make the operation idempotent.
 
@@ -60,18 +60,27 @@ These are convenience checks, not a substitute for server-side authorization or 
 
 ## HTTP — `ocode-js/http`
 
-- `fetchJson(url, options?)`: fetch and decode a JSON response; check errors and validate returned data at the application boundary.
-- `jsonHeaders(headers?)`: create headers suitable for JSON requests.
-- `jsonRequest(url, body, options?)`: construct/send a JSON request according to the exported helper's options.
+- `fetchJson(input, init?)`: call `fetch`, check the HTTP response, and decode JSON. Validate returned data at the application boundary.
+- `jsonHeaders(headers?)`: create a `Headers` object with JSON Accept/Content-Type defaults while preserving supplied headers.
+- `jsonRequest(body, init?)`: return a `RequestInit` object with JSON-stringified body and JSON headers. It does not perform the network request itself.
+
+Example:
+
+```ts
+const response = await fetch("/api/items", jsonRequest({ name: "example" }, { method: "POST" }));
+const data = await response.json();
+```
 
 Network requests can fail, time out, or return untrusted data. Apply authentication, authorization, schema validation, and cancellation policies in your application.
 
 ## Browser storage — `ocode-js/browser`
 
-- `getLocalStorage()`: safely obtain localStorage when the environment supports it.
-- `readStorage(key, fallback?)`
-- `writeStorage(key, value)`
-- `removeStorage(key)`
+The storage helpers receive a Storage-like object explicitly, which makes them testable and lets callers handle environments where browser storage is unavailable.
+
+- `getLocalStorage()`: safely obtain `localStorage` when the environment supports it; otherwise return `null`.
+- `readStorage(storage, key, fallback)`: parse the JSON value at `key`; return `fallback` when missing, malformed, or inaccessible.
+- `writeStorage(storage, key, value)`: JSON-serialize and store a value; return a boolean indicating success.
+- `removeStorage(storage, key)`: remove a key and return a boolean indicating success.
 
 Call browser storage helpers only in browser contexts. Do not store secrets, session tokens, or sensitive personal data in localStorage.
 
