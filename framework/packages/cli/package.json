@@ -1,0 +1,12 @@
+{
+  "name": "@ocodejs/cli",
+  "version": "0.1.0",
+  "description": "Command-line tools for OCodejs",
+  "type": "module",
+  "bin": { "ocode": "./src/index.js" },
+  "exports": { ".": "./src/args.js" },
+  "files": ["src", "README.md"],
+  "dependencies": { "@ocodejs/core": "*" },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
