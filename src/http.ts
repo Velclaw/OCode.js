@@ -17,5 +17,7 @@ export function jsonHeaders(headers?: HeadersInit): Headers {
   return result;
 }
 export function jsonRequest<T>(body: T, init: RequestInit = {}): RequestInit {
-  return { ...init, headers: jsonHeaders(init.headers), body: JSON.stringify(body) };
+  const serialized = JSON.stringify(body);
+  if (serialized === undefined) throw new TypeError("Request body is not JSON-serializable");
+  return { ...init, headers: jsonHeaders(init.headers), body: serialized };
 }
