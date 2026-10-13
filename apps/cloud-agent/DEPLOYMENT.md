@@ -8,9 +8,9 @@ Do not expose this MVP to the public internet yet. It is a restricted demo runti
 
 - Skills are deterministic (/status, /echo, and a draft-plan fallback); no LLM provider is connected.
 - Durable cloud operation requires web and worker processes sharing the same existing PostgreSQL database.
-- Login throttling is process-local and trusts the first X-Forwarded-For value. It is not suitable as the only public abuse control behind arbitrary proxies.
-- Origin checks reject a supplied mismatching Origin but allow requests with no Origin; review CSRF policy before public exposure.
-- There is no distributed task lease/recovery policy for jobs left in running if a worker crashes.
+- Login throttling remains process-local and trusts the first X-Forwarded-For value. It is not suitable as the only public abuse control behind arbitrary proxies; use a trusted-proxy policy and distributed rate limiting before public exposure.
+- Chat and login mutation endpoints reject missing, malformed, or mismatched Origin headers. In production, configure APP_ORIGIN explicitly. Continue reviewing every future mutation endpoint for the same protection.
+- The worker refreshes task timestamps every 60 seconds and requeues tasks left in running for more than five minutes, on startup and periodically. A prolonged worker/event-loop stall can still cause duplicate execution; this is best-effort recovery, not a distributed lease.
 - Database schema setup is automatic at startup. Use a dedicated database role and back up any shared database before first run.
 - The worker executes only allowlisted deterministic skills. Do not add shell, repository-write, deployment, or other side-effecting skills without an isolated sandbox and explicit approval workflow.
 
@@ -43,8 +43,8 @@ The health endpoint intentionally returns HTTP 503 in memory/demo mode. A succes
 - [ ] Deploy web and worker from the same reviewed commit.
 - [ ] Confirm GET /api/health returns HTTP 200 with database: postgres.
 - [ ] Log in, submit /status, and confirm the task reaches completed in the UI.
-- [ ] Restart the worker in staging and verify queued tasks recover as expected; currently there is no automatic recovery for tasks stranded in running.
-- [ ] Check TLS, access logs, error handling, rate limiting, backups, and restore procedure.
+- [ ] Restart the worker in staging and verify queued tasks are processed and stale running tasks are requeued.
+- [ ] Check TLS, access logs, error handling, distributed rate limiting, backups, and restore procedure.
 - [ ] Obtain explicit production approval before production deployment or any paid resource creation.
 
 ## Rollback
