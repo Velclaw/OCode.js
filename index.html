@@ -1,70 +1,103 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0d12">
-  <meta name="description" content="OCode.js — thư viện tiện ích JavaScript và TypeScript gọn nhẹ, không phụ thuộc runtime, dành cho ứng dụng web hiện đại.">
-  <title>OCode.js — Utilities for modern JavaScript</title>
-  <link rel="icon" href="./assets/ocode-logo.svg" type="image/svg+xml">
-  <style>
-    :root{color-scheme:dark;--bg:#090b10;--panel:#11151e;--panel2:#151b27;--text:#f3f5fa;--muted:#a4adbd;--line:#252c3a;--blue:#78a7ff;--cyan:#75e0d0;--max:1120px}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1a2c4a 0,transparent 55%),var(--bg);color:var(--text);font:16px/1.65 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}.container{width:min(var(--max),calc(100% - 40px));margin:auto}
-    header{border-bottom:1px solid #ffffff12;background:#090b10b8;backdrop-filter:blur(16px);position:sticky;top:0;z-index:5}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;font-weight:750;letter-spacing:-.04em;font-size:21px}.brand img{width:34px;height:34px;object-fit:contain}.brand span{color:var(--blue)}.links{display:flex;align-items:center;gap:24px;color:var(--muted);font-size:14px}.links a:hover{color:var(--text)}
-    .hero{padding:90px 0 72px;text-align:center}.eyebrow{display:inline-flex;gap:9px;align-items:center;border:1px solid #78a7ff55;background:#78a7ff10;color:#b9d0ff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px #75e0d0aa}
-    h1{font-size:clamp(42px,7vw,76px);line-height:1.04;letter-spacing:-.065em;margin:25px auto 20px;max-width:900px}h1 .gradient{background:linear-gradient(100deg,#fff 5%,#a9c8ff 50%,#75e0d0 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{max-width:700px;margin:0 auto;color:var(--muted);font-size:clamp(16px,2vw,19px)}
-    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:30px 0 26px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 18px;border-radius:12px;border:1px solid var(--line);font-weight:700;font-size:14px;transition:transform .18s,border-color .18s}.btn:hover{transform:translateY(-2px);border-color:#71809b}.primary{background:#eaf1ff;color:#101522;border-color:#eaf1ff}.primary:hover{background:#fff}.secondary{background:#151a25}.subnote{color:#768196;font-size:12px}
-    .terminal{max-width:760px;margin:36px auto 0;border:1px solid #ffffff1a;border-radius:16px;overflow:hidden;text-align:left;background:#0b0e15;box-shadow:0 24px 80px #0006}.termbar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid #ffffff12;color:#8994a7;font-size:12px}.traffic{width:9px;height:9px;border-radius:50%;background:#596274}.termbar .label{margin-left:8px}.termcontent{padding:20px 22px;font:14px/1.9 ui-monospace,SFMono-Regular,Menlo,monospace;color:#c7d1e2;overflow:auto}.prompt{color:var(--cyan)}.comment{color:#77859b}
-    section{padding:62px 0}.section-head{text-align:center;max-width:700px;margin:0 auto 32px}.kicker{color:var(--cyan);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.14em}.section-head h2{font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.045em;margin:10px 0}.section-head p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);background:linear-gradient(145deg,#141a26,#0f121a);padding:22px;border-radius:16px;min-width:0}.icon{width:38px;height:38px;display:grid;place-items:center;border:1px solid #78a7ff40;background:#78a7ff12;border-radius:11px;color:var(--blue);font-size:18px;font-weight:800}.card h3{margin:15px 0 5px;font-size:17px;letter-spacing:-.02em}.card p{margin:0;color:var(--muted);font-size:14px}.pillrow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:24px}.pill{border:1px solid var(--line);background:#ffffff05;border-radius:999px;padding:6px 11px;font-size:12px;color:#bdc7d8}
-    .install{max-width:780px;margin:auto;border:1px solid var(--line);border-radius:18px;padding:26px;background:var(--panel)}.install h3{margin:0 0 5px;font-size:20px}.install p{color:var(--muted);margin:0 0 16px;font-size:14px}.code{background:#080a0f;border:1px solid #ffffff14;border-radius:11px;padding:15px 17px;display:flex;justify-content:space-between;gap:12px;align-items:center;font:14px ui-monospace,SFMono-Regular,Menlo,monospace;overflow:auto}.code code{white-space:nowrap}.code button{flex-shrink:0;border:1px solid #ffffff25;background:#171d29;color:var(--text);border-radius:8px;padding:7px 10px;font:inherit;font-size:12px;cursor:pointer}.hint{margin-top:12px!important;font-size:12px!important}
-    .cta{border:1px solid #78a7ff35;background:linear-gradient(115deg,#18243a,#111822 65%,#102421);border-radius:20px;padding:30px;display:flex;justify-content:space-between;align-items:center;gap:24px}.cta h2{margin:0 0 6px;font-size:clamp(23px,3vw,32px);letter-spacing:-.04em}.cta p{margin:0;color:var(--muted);font-size:14px}.cta .actions{margin:0;flex-shrink:0}
-    footer{border-top:1px solid var(--line);padding:28px 0;color:#8490a3;font-size:12px}.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.footlinks{display:flex;gap:18px;flex-wrap:wrap}.foot a:hover{color:var(--text)}
-    @media(max-width:760px){.links{gap:12px}.links a:nth-child(2),.links a:nth-child(3){display:none}.hero{padding:64px 0 48px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cta{align-items:flex-start;flex-direction:column}.cta .actions{justify-content:flex-start}}
-    @media(max-width:480px){.container{width:min(var(--max),calc(100% - 28px))}.brand{font-size:18px}.brand img{width:29px;height:29px}.links{font-size:12px}.grid{grid-template-columns:1fr}.card{padding:19px}.hero{padding-top:52px}.termcontent{font-size:12px;padding:16px}.install{padding:18px}.code{font-size:12px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCODE.js - Logo</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --text-primary:#111111;
+  --border:#e5e5e5;
+  --border-strong:#c9c9c9;
+  --surface:#f5f5f5;
+  --accent-bg:#e6f0ff;
+  --accent-text:#0b4fb3;
+  --accent-border:#8db6f2;
+  --radius:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0b0b;
+    --text-primary:#f2f2f2;
+    --border:#2a2a2a;
+    --border-strong:#444444;
+    --surface:#1a1a1a;
+    --accent-bg:#14264a;
+    --accent-text:#9cc3ff;
+    --accent-border:#2f5fa8;
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+.wrap{width:100%;max-width:520px;padding:24px}
+
+/* Logo */
+.th{fill:var(--text-primary);font-weight:500}
+.l{stroke-dasharray:1;stroke-dashoffset:1}
+.go .l{animation:draw .8s cubic-bezier(.65,0,.35,1) both;animation-delay:calc(var(--i)*.13s + .35s)}
+.go .sl{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s ease-out both}
+.go .js{animation:slide .6s cubic-bezier(.2,.8,.2,1) 1.45s both}
+.go .hr{animation:sweep 1.2s cubic-bezier(.65,0,.35,1) .2s both}
+.g{transition:transform .25s cubic-bezier(.2,.8,.2,1);transform-box:fill-box}
+.g:hover{transform:translateY(-4px)}
+.hr{transform-origin:0 50%;transform-box:fill-box}
+#logo{display:block;transition:opacity .5s ease}
+#logo.out{opacity:0}
+
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes slide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+@keyframes sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){
+  .go *{animation:none!important}
+  .l,.sl{stroke-dashoffset:0}
+}
+</style>
 </head>
 <body>
-<header><div class="container nav">
-  <a class="brand" href="#top" aria-label="OCode.js home"><img src="./assets/ocode-logo.svg" alt=""><span>OCode.js</span></a>
-  <nav class="links" aria-label="Main navigation"><a href="#features">Tính năng</a><a href="#install">Bắt đầu</a><a href="./docs/API.md">API</a><a href="https://github.com/Velclaw/OCode.js">GitHub ↗</a></nav>
-</div></header>
-<main id="top">
-  <section class="hero"><div class="container">
-    <div class="eyebrow"><span class="dot"></span> JavaScript · TypeScript · Zero runtime dependencies</div>
-    <h1>Các tiện ích nhỏ.<br><span class="gradient">Ứng dụng mạnh mẽ hơn.</span></h1>
-    <p class="lead">OCode.js là bộ tiện ích gọn nhẹ, có kiểu dữ liệu rõ ràng và không phụ thuộc framework — giúp bạn xử lý các tác vụ thường gặp trong ứng dụng web hiện đại.</p>
-    <div class="actions"><a class="btn primary" href="#install">Bắt đầu sử dụng <span aria-hidden="true">→</span></a><a class="btn secondary" href="https://github.com/Velclaw/OCode.js">Xem mã nguồn ↗</a></div>
-    <div class="subnote">Phiên bản 0.1.0 · MIT License · Node.js 18+</div>
-    <div class="terminal" aria-label="Example terminal"><div class="termbar"><span class="traffic"></span><span class="traffic"></span><span class="traffic"></span><span class="label">quick-start.ts</span></div><div class="termcontent"><div><span class="comment">// Dùng các helper theo từng nhu cầu</span></div><div><span class="prompt">import</span> { slugify, withQuery, retry } <span class="prompt">from</span> "ocode-js";</div><br><div><span class="prompt">const</span> slug = slugify("Build a better web");</div><div><span class="prompt">const</span> url = withQuery("/docs", { page: 2 });</div><div><span class="prompt">console</span>.log({ slug, url });</div></div></div>
-  </div></section>
-  <section id="features"><div class="container">
-    <div class="section-head"><div class="kicker">Bộ công cụ</div><h2>Tập trung vào những thứ bạn cần</h2><p>Các hàm nhỏ, dễ kết hợp, có kiểm thử và được viết bằng TypeScript strict.</p></div>
-    <div class="grid">
-      <article class="card"><div class="icon">Aa</div><h3>String utilities</h3><p>Tạo slug, đổi kiểu chữ, escape HTML và cắt chuỗi an toàn.</p></article>
-      <article class="card"><div class="icon">{ }</div><h3>Object helpers</h3><p>Pick, omit, merge đệ quy, đọc đường dẫn lồng nhau và clone JSON.</p></article>
-      <article class="card"><div class="icon">↻</div><h3>Async control</h3><p>Retry, timeout, deduplicate lời gọi bất đồng bộ và sleep có hỗ trợ abort.</p></article>
-      <article class="card"><div class="icon">↗</div><h3>URL tools</h3><p>Parse URL, cập nhật query, nối URL và loại bỏ tracking parameters.</p></article>
-      <article class="card"><div class="icon">✓</div><h3>Validation</h3><p>Kiểm tra email, HTTP URL, record, khoảng giá trị và điều kiện đầu vào.</p></article>
-      <article class="card"><div class="icon">⌁</div><h3>HTTP & runtime</h3><p>Fetch JSON có kiểu, browser storage an toàn, env helpers và logger.</p></article>
-    </div>
-    <div class="pillrow"><span class="pill">TypeScript strict</span><span class="pill">No runtime dependencies</span><span class="pill">Node test runner</span><span class="pill">Source maps</span><span class="pill">Framework-agnostic</span></div>
-  </div></section>
-  <section id="install"><div class="container">
-    <div class="section-head"><div class="kicker">Bắt đầu</div><h2>Tích hợp vào dự án của bạn</h2><p>Gói hiện đang ở giai đoạn phát triển ban đầu. npm chưa được xác nhận là đã phát hành.</p></div>
-    <div class="install"><h3>Chạy từ mã nguồn</h3><p>Clone repository để cài đặt, kiểm thử và build thư viện.</p>
-      <div class="code"><code>git clone https://github.com/Velclaw/OCode.js.git</code><button type="button" data-copy="git clone https://github.com/Velclaw/OCode.js.git">Sao chép</button></div>
-      <div class="code" style="margin-top:8px"><code>cd OCode.js &amp;&amp; npm install &amp;&amp; npm test</code><button type="button" data-copy="cd OCode.js && npm install && npm test">Sao chép</button></div>
-      <p class="hint">Khi gói được phát hành chính thức, hướng dẫn cài đặt qua npm sẽ được cập nhật.</p>
-    </div>
-  </div></section>
-  <section><div class="container"><div class="cta"><div><h2>Xây dựng rõ ràng. Phát triển linh hoạt.</h2><p>Khám phá mã nguồn, tài liệu API và các ví dụ của OCode.js.</p></div><div class="actions"><a class="btn primary" href="https://github.com/Velclaw/OCode.js">GitHub repository ↗</a><a class="btn secondary" href="./docs/API.md">Đọc API</a></div></div></div></section>
-</main>
-<footer><div class="container foot"><span>© <span id="year">2026</span> OCode.js · MIT License</span><div class="footlinks"><a href="https://github.com/Velclaw/OCode.js">GitHub</a><a href="./assets/logo-preview.html">Logo assets</a><a href="./docs/API.md">API reference</a></div></div></footer>
+<div class="wrap">
+
+<svg id="logo" class="go" width="100%" viewBox="0 0 380 140" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Logo OCODE.js</title>
+  <desc>Logo chữ OCODE kèm hậu tố .JS, có hiệu ứng vẽ nét và vòng lặp</desc>
+  <line class="sl" pathLength="1" x1="12" y1="100" x2="24" y2="44" stroke="var(--border-strong)" stroke-width="1"/>
+  <g fill="none" stroke="var(--text-primary)" stroke-width="9" stroke-linejoin="miter" stroke-linecap="butt">
+    <g class="g"><rect class="l" pathLength="1" style="--i:0" x="32.5" y="48.5" width="33" height="47" rx="16.5"/></g>
+    <g class="g"><path class="l" pathLength="1" style="--i:1" d="M117.5 48.5H101A16.5 16.5 0 0 0 84.5 65V79A16.5 16.5 0 0 0 101 95.5H117.5"/></g>
+    <g class="g"><rect class="l" pathLength="1" style="--i:2" x="136.5" y="48.5" width="33" height="47" rx="16.5"/></g>
+    <g class="g"><path class="l" pathLength="1" style="--i:3" d="M188.5 48.5H205A16.5 16.5 0 0 1 221.5 65V79A16.5 16.5 0 0 1 205 95.5H188.5Z"/></g>
+    <g class="g"><path class="l" pathLength="1" style="--i:4" d="M273.5 48.5H240.5V95.5H273.5M240.5 72H268"/></g>
+  </g>
+  <text class="th js" x="282" y="96" style="font-size:18px">.JS</text>
+  <line class="hr" x1="0" y1="124" x2="380" y2="124" stroke="var(--border)" stroke-width="1"/>
+</svg>
+
+</div>
+
 <script>
-document.querySelectorAll("[data-copy]").forEach(function(button){button.addEventListener("click",async function(){var original=button.textContent;try{await navigator.clipboard.writeText(button.getAttribute("data-copy"));button.textContent="Đã sao chép";}catch(e){button.textContent="Không sao chép được";}setTimeout(function(){button.textContent=original;},1600);});});
-document.getElementById("year").textContent=String(new Date().getFullYear());
+var s = document.getElementById('logo'), t1, t2;
+
+function play(){
+  clearTimeout(t1); clearTimeout(t2);
+  s.classList.remove('go','out');
+  void s.getBoundingClientRect();
+  s.classList.add('go');
+  t1 = setTimeout(function(){
+    s.classList.add('out');
+    t2 = setTimeout(play, 550);
+  }, 4200);
+}
+
+play();
 </script>
 </body>
 </html>
