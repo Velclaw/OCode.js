@@ -31,6 +31,9 @@ test("object helpers do not mutate inputs", () => {
 test("async helpers retry, dedupe and time out", async () => {
   let count = 0;
   assert.equal(await retry(async () => { count++; if (count < 2) throw new Error("retry"); return "ok"; }, { attempts: 2, delayMs: 0 }), "ok");
+  await assert.rejects(retry(async () => "unused", { delayMs: Number.NaN }), RangeError);
+  await assert.rejects(retry(async () => "unused", { factor: Number.POSITIVE_INFINITY }), RangeError);
+  await assert.rejects(retry(async () => "unused", { maxDelayMs: Number.POSITIVE_INFINITY }), RangeError);
   let calls = 0;
   const once = dedupeAsync(async () => { calls++; await new Promise((resolve) => setTimeout(resolve, 5)); return 7; });
   assert.deepEqual(await Promise.all([once(), once()]), [7, 7]);
