@@ -16,7 +16,7 @@ export function safeEqual(a:string,b:string){
   const left=Buffer.from(a),right=Buffer.from(b);
   return left.length===right.length&&timingSafeEqual(left,right);
 }
-export function createSessionToken(now=Date.now(),githubLogin="test"){
+export function createSessionToken(githubLogin:string,now=Date.now()){
   const payload=Buffer.from(JSON.stringify({sub:"github:"+githubLogin.toLowerCase(),exp:now+SESSION_TTL})).toString("base64url");
   return payload+"."+sign(payload);
 }
