@@ -1,5 +1,6 @@
 import {NextResponse} from "next/server";
 import {isAuthenticated} from "@/lib/auth";
+const requiresLogin=()=>process.env.ALLOW_ANONYMOUS_ACCESS!=="true";
 import {createTurn,databaseMode,finishTask,listMessages} from "@/lib/store";
 import {runSkill,selectSkill} from "@/lib/agent";
 import {isSameOriginRequest} from "@/lib/request-security";
@@ -8,7 +9,7 @@ export const runtime="nodejs";
 export const dynamic="force-dynamic";
 
 export async function GET(){
-  if(!(await isAuthenticated()))return NextResponse.json({error:"Unauthorized"},{status:401});
+  if(requiresLogin()&&!(await isAuthenticated()))return NextResponse.json({error:"Unauthorized"},{status:401});
   try{return NextResponse.json({messages:await listMessages()},{headers:{"Cache-Control":"no-store"}});}
   catch{return NextResponse.json({error:"Không đọc được lịch sử chat."},{status:503});}
 }
