@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="OCode.js — bộ tiện ích JavaScript và TypeScript gọn nhẹ, không phụ thuộc runtime.">
+  <title>OCode.js — Build clear. Ship confidently.</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080c16;--panel:#10182a;--text:#f3f6ff;--muted:#a7b3ca;--line:#26334c;--blue:#65a7ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#3478f629,transparent 48%),var(--bg);color:var(--text);font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{width:min(100% - 32px,900px);margin:auto;padding:clamp(36px,8vw,88px) 0}
+    header{text-align:center;padding:clamp(24px,5vw,56px) 0 36px}
+    .logo{width:min(100%,560px);height:auto;display:block;margin:0 auto 24px}
+    h1{font-size:clamp(2rem,6vw,3.5rem);line-height:1.08;letter-spacing:-.045em;margin:0 0 16px}
+    .lead{max-width:650px;margin:auto;color:var(--muted);font-size:clamp(1rem,2.5vw,1.15rem)}
+    .actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:28px}
+    a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:14px;font-weight:650}
+    .primary{background:#3478f6;color:#fff;border-color:#3478f6}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px;margin-top:34px}
+    .card{padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(150deg,#131e33,var(--panel))}
+    .card h2{font-size:1.05rem;margin:0 0 8px}.card p{margin:0;color:var(--muted);font-size:.94rem}
+    footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:34px}
+    @media(prefers-reduced-motion:no-preference){.card{transition:transform .18s ease,border-color .18s ease}.card:hover{transform:translateY(-3px);border-color:#527fc2}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img class="logo" src="./assets/ocode-logo.svg" alt="OCode.js logo">
+    <h1>Build clear. Ship confidently.</h1>
+    <p class="lead">OCode.js là bộ tiện ích JavaScript/TypeScript gọn nhẹ, không có dependency lúc chạy, hỗ trợ các ứng dụng web hiện đại — bao gồm Next.js.</p>
+    <nav class="actions" aria-label="Tài nguyên dự án">
+      <a class="button primary" href="https://github.com/Velclaw/OCode.js">Mã nguồn GitHub</a>
+      <a class="button" href="./assets/logo-preview.html">Xem logo động</a>
+      <a class="button" href="./docs/API.md">Tài liệu API</a>
+    </nav>
+  </header>
+  <section class="grid" aria-label="Tính năng">
+    <article class="card"><h2>TypeScript-first</h2><p>API nhỏ, có kiểu dữ liệu và được thiết kế để tái sử dụng.</p></article>
+    <article class="card"><h2>Không dependency runtime</h2><p>Giảm gánh nặng cài đặt cho ứng dụng và thư viện.</p></article>
+    <article class="card"><h2>Kiểm thử tự động</h2><p>Build, test và kiểm tra package thông qua GitHub Actions.</p></article>
+  </section>
+  <footer>OCode.js · MIT License · Phiên bản phát triển ban đầu</footer>
+</main>
+</body>
+</html>
