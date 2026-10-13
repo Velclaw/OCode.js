@@ -63,9 +63,9 @@ export class LoginRateLimiter {
 
   private maintain(now: number): void {
     this.operations += 1;
-    if (this.operations % CLEANUP_EVERY_OPERATIONS !== 0 && this.attempts.size < this.maxEntries) {
-      return;
-    }
+    // Amortize cleanup even at capacity: scanning the full map on every
+    // request would make the hot path O(maxEntries) under sustained pressure.
+    if (this.operations % CLEANUP_EVERY_OPERATIONS !== 0) return;
     for (const [key, state] of this.attempts) {
       if (state.resetAt <= now) this.attempts.delete(key);
     }
