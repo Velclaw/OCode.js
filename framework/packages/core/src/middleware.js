@@ -1,8 +1,10 @@
 /**
  * Compose middleware in registration order. Each middleware receives (request, next).
+ * next() returns a promise for the downstream result, which middleware may transform.
  * Returning without calling next short-circuits the pipeline. The returned handler
- * resolves with the handler result; uncaught handler errors and repeated next()
- * errors reject it. Each request has its own pipeline state.
+ * resolves with the first middleware's result, or the terminal result if none exist;
+ * uncaught handler errors and repeated next() errors reject it. Each request has
+ * its own pipeline state.
  * Throws TypeError if middleware is not an array of functions or terminalHandler
  * is not a function.
  */

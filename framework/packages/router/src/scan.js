@@ -11,8 +11,8 @@ function routeSegmentName(segment) {
 }
 /**
  * Throw for empty/dot segments or bracket syntax other than [name], identifying
- * the route directory. Names start with an ASCII letter and contain only ASCII
- * letters, digits, and underscores.
+ * the route directory. Dynamic parameter names start with an ASCII letter and
+ * contain only ASCII letters, digits, and underscores.
  */
 function validateSegment(segment, relativeDirectory) {
   if (!segment || segment === '.' || segment === '..') throw new Error(`Invalid route segment "${segment}" in ${relativeDirectory || 'src/app'}.`);
