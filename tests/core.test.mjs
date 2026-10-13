@@ -33,6 +33,14 @@ test("object helpers do not mutate inputs", () => {
   assert.equal(Object.getPrototypeOf(merged), Object.prototype);
   assert.equal(Object.prototype.hasOwnProperty.call(merged, "__proto__"), true);
   assert.equal(Object.prototype.polluted, undefined);
+
+  const picked = pick(malicious, ["__proto__"]);
+  assert.equal(Object.getPrototypeOf(picked), Object.prototype);
+  assert.equal(Object.prototype.hasOwnProperty.call(picked, "__proto__"), true);
+  const omitted = omit(malicious, []);
+  assert.equal(Object.getPrototypeOf(omitted), Object.prototype);
+  assert.equal(Object.prototype.hasOwnProperty.call(omitted, "__proto__"), true);
+  assert.equal(Object.prototype.polluted, undefined);
 });
 test("async helpers retry, dedupe and time out", async () => {
   let count = 0;
