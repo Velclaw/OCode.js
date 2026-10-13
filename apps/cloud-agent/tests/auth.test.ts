@@ -14,7 +14,7 @@ test("accepts a valid signed GitHub session token",()=>{
 
 test("rejects expired, altered, and missing session tokens",()=>{
   const now=1_800_000_000_000;
-  const token=createSessionToken(now,"zskbot");
+  const token=createSessionToken("zskbot",now);
   assert.equal(verifySessionToken(token,now+12*60*60*1000+1),false);
   assert.equal(verifySessionToken(token+"x",now),false);
   assert.equal(verifySessionToken(undefined,now),false);
@@ -29,7 +29,7 @@ test("rejects legacy password-admin session tokens",()=>{
 
 test("rejects a token signed with a different secret",()=>{
   const now=1_800_000_000_000;
-  const token=createSessionToken(now,"zskbot");
+  const token=createSessionToken("zskbot",now);
   process.env.SESSION_SECRET="another-test-secret-that-is-also-longer-than-32-characters";
   assert.equal(verifySessionToken(token,now),false);
 });
