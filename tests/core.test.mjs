@@ -70,6 +70,8 @@ test("validation and environment helpers", () => {
   assert.equal(isWithinRange(4, 1, 5), true);
   const source = { A: "value", EMPTY: " ", FLAG: "yes", COUNT: "42", BAD: "4x" };
   assert.equal(getEnv("A", "fallback", { source }), "value");
+  assert.equal(getEnv("__proto__", "fallback", { source }), "fallback");
+  assert.equal(getEnv("constructor", "fallback", { source }), "fallback");
   assert.throws(() => requireEnv("MISSING", { source }), /MISSING/);
   assert.equal(getEnvBoolean("FLAG", false, { source }), true);
   assert.equal(getEnvNumber("COUNT", 0, { source }), 42);
