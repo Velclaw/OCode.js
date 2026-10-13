@@ -6,7 +6,7 @@ export const runtime="nodejs";
 type GitHubToken={access_token?:string;error?:string};
 type GitHubUser={login?:string;id?:number};
 
-function returnTo(request:Request,code:string){return NextResponse.redirect(new URL("/?authError="+code,request.url));}
+function returnTo(request:Request,code:string){const origin=process.env.APP_ORIGIN||new URL(request.url).origin;const target=new URL("/",origin);target.searchParams.set("authError",code);return NextResponse.redirect(target);}
 export async function GET(request:Request){
   const url=new URL(request.url);
   const code=url.searchParams.get("code");
