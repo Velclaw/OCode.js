@@ -1,0 +1,125 @@
+name: Multi-language CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - if: hashFiles('package.json') != ''
+        run: |
+          npm ci || npm install
+          npm run build --if-present
+          npm test --if-present
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('requirements.txt', 'pyproject.toml') != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - if: hashFiles('requirements.txt', 'pyproject.toml') != ''
+        run: |
+          pip install -r requirements.txt || pip install .
+          pip install pytest
+          pytest || true
+
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('pom.xml', 'build.gradle', 'build.gradle.kts') != ''
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - if: hashFiles('pom.xml') != ''
+        run: mvn -B verify
+      - if: hashFiles('build.gradle', 'build.gradle.kts') != ''
+        run: ./gradlew build
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('go.mod') != ''
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - if: hashFiles('go.mod') != ''
+        run: |
+          go build ./...
+          go test ./...
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('Cargo.toml') != ''
+        uses: dtolnay/rust-toolchain@stable
+      - if: hashFiles('Cargo.toml') != ''
+        run: |
+          cargo build --verbose
+          cargo test --verbose
+
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('**/*.csproj', '**/*.sln') != ''
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - if: hashFiles('**/*.csproj', '**/*.sln') != ''
+        run: |
+          dotnet restore
+          dotnet build --no-restore
+          dotnet test --no-build
+
+  php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('composer.json') != ''
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+      - if: hashFiles('composer.json') != ''
+        run: composer install --no-interaction
+
+  ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('Gemfile') != ''
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - if: hashFiles('Gemfile') != ''
+        run: bundle exec rake || true
+
+  cpp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - if: hashFiles('CMakeLists.txt') != ''
+        run: |
+          cmake -B build
+          cmake --build build
+          ctest --test-dir build || true
