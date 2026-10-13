@@ -1,0 +1,1 @@
+# @ocodejs/core\n\nEarly Node.js HTTP runtime for OCodejs file-system routes. Exports `createOCodeServer`, `listen`, and `composeMiddleware`. Page/layout modules must currently be runnable JavaScript returning HTML strings or a `Response`. TypeScript/JSX compilation, API routes, HMR, and active loading/error boundaries are not implemented.\n
