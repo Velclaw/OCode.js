@@ -4,18 +4,32 @@ import path from 'node:path';
 const FILE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx']);
 const CONVENTIONS = new Set(['page', 'layout', 'loading', 'error']);
 
+/** Return null for a parenthesized route group; otherwise preserve the segment. */
 function routeSegmentName(segment) {
   if (/^\([^/]+\)$/.test(segment)) return null;
   return segment;
 }
+/**
+ * Throw for empty/dot segments or bracket syntax other than [name], identifying
+ * the route directory. Names start with an ASCII letter and contain only ASCII
+ * letters, digits, and underscores.
+ */
 function validateSegment(segment, relativeDirectory) {
   if (!segment || segment === '.' || segment === '..') throw new Error(`Invalid route segment "${segment}" in ${relativeDirectory || 'src/app'}.`);
   if (segment.includes('[') || segment.includes(']')) {
     if (!/^\[([A-Za-z][A-Za-z0-9_]*)\]$/.test(segment)) throw new Error(`Unsupported dynamic route segment "${segment}" in ${relativeDirectory || 'src/app'}; use [name].`);
   }
 }
+/** Build a collision key that treats all dynamic parameter names as the same segment. */
 function structuralKey(segments) { return segments.map((segment) => /^\[[^\]]+\]$/.test(segment) ? '[]' : segment).join('/'); }
 
+/**
+ * Collect page routes beneath directory with inherited layout/loading/error files
+ * ordered from outermost to innermost. Route groups do not contribute URL segments;
+ * underscore-prefixed entries and node_modules are skipped.
+ * Rejects on symbolic links, duplicate convention files, invalid route segments,
+ * or directory read errors.
+ */
 async function walk(directory, appRoot, inherited) {
   const entries = await readdir(directory, { withFileTypes: true });
   entries.sort((a, b) => a.name.localeCompare(b.name));
@@ -53,6 +67,14 @@ async function walk(directory, appRoot, inherited) {
   }
   return routes;
 }
+/**
+ * Scan an app directory for page/layout/loading/error files with JS, JSX, TS, or TSX
+ * extensions. Return a version-1 manifest with an absolute appDirectory and module
+ * paths; routes sort by segment count, then a key placing dynamic segments last.
+ * Rejects for a missing/non-directory root, scan errors, or routes whose segment
+ * structure collides after omitting groups and ignoring dynamic parameter names.
+ * Files are recorded without importing or compiling their contents.
+ */
 export async function scanAppDirectory(appDirectory) {
   const appRoot = path.resolve(appDirectory);
   let info;

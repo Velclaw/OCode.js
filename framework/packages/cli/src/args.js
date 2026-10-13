@@ -1,3 +1,9 @@
+/**
+ * Parse CLI arguments after the executable name into a command and supplied options.
+ * Empty input selects help; ports accept decimal integers from 0 through 65535.
+ * Throws TypeError for non-string-array input and Error for unknown commands or
+ * options, duplicate options, invalid values, or --host with build.
+ */
 export function parseArgs(argv) {
   if (!Array.isArray(argv) || argv.some((arg) => typeof arg !== 'string')) throw new TypeError('Arguments must be an array of strings.');
   const [command, ...rest] = argv;

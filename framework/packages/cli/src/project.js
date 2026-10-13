@@ -1,5 +1,9 @@
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+/**
+ * Resolve rootOption relative to cwd and return its absolute directory path.
+ * Rejects for a missing or non-directory root; other filesystem errors propagate.
+ */
 export async function resolveProjectRoot(cwd, rootOption = '.') {
   const root = path.resolve(cwd, rootOption);
   let info;
@@ -10,6 +14,10 @@ export async function resolveProjectRoot(cwd, rootOption = '.') {
   if (!info.isDirectory()) throw new Error(`Project root is not a directory: ${root}`);
   return root;
 }
+/**
+ * List regular files recursively in sorted traversal order using POSIX paths under prefix.
+ * Rejects on symbolic links or directory read errors; other entry kinds are ignored.
+ */
 async function listFiles(directory, prefix = '') {
   const entries = await readdir(directory, { withFileTypes: true }), files = [];
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
@@ -20,6 +28,13 @@ async function listFiles(directory, prefix = '') {
   }
   return files;
 }
+/**
+ * Replace root/dist with a copy of public and an ocode-build.json manifest.
+ * Requires public/index.html and rejects symbolic links within public.
+ * now supplies the Date used for the manifest's ISO buildTime.
+ * Resolves with { outputDir, files, manifest }; validation, filesystem, and
+ * timestamp errors propagate, and failures after removal may leave partial output.
+ */
 export async function buildProject(root, { now = () => new Date() } = {}) {
   const publicDir = path.join(root, 'public');
   let info;
@@ -38,4 +53,5 @@ export async function buildProject(root, { now = () => new Date() } = {}) {
   await writeFile(path.join(outputDir, 'ocode-build.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   return { outputDir, files, manifest };
 }
+/** Read public/index.html as UTF-8 text, propagating filesystem errors. */
 export async function readProjectIndex(root) { return readFile(path.join(root, 'public', 'index.html'), 'utf8'); }

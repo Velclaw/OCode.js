@@ -7,6 +7,14 @@ import { buildProject, resolveProjectRoot } from './project.js';
 import { createDevServer, listen } from './dev-server.js';
 import { createOCodeServer } from '@ocodejs/core';
 import { stat } from 'node:fs/promises';
+/**
+ * Run CLI arguments, resolving --root relative to cwd and writing messages through io.
+ * Resolves to 0 for help, version, or a completed build; dev returns
+ * { code: 0, server, address } after binding and registers SIGINT/SIGTERM shutdown.
+ * Uses src/app when it is a directory, otherwise serves public assets.
+ * Caught command, build, and startup errors are reported through io.error and
+ * return 1; an error thrown by io.error itself rejects the call.
+ */
 export async function run(argv = process.argv.slice(2), io = console, cwd = process.cwd()) {
   try {
     const parsed = parseArgs(argv);

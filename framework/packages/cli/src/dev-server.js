@@ -11,6 +11,13 @@ const MIME_TYPES = new Map([
   ['.webp', 'image/webp'], ['.jpg', 'image/jpeg'], ['.jpeg', 'image/jpeg']
 ]);
 
+/**
+ * Create an unbound server for root/public and return { server, host, port }.
+ * GET and HEAD serve files, with / mapped to index.html; other methods receive 405.
+ * Malformed paths receive 400 and paths outside public receive 403. File access
+ * errors become 403 for permission failures and 404 otherwise.
+ * Rejects if public is missing or is not a directory, or directory lookup fails.
+ */
 export async function createDevServer({ root, host = '127.0.0.1', port = 3000 }) {
   const publicDir = path.join(root, 'public');
   let info;
@@ -46,6 +53,11 @@ export async function createDevServer({ root, host = '127.0.0.1', port = 3000 })
   });
   return { server, host, port };
 }
+/**
+ * Bind the server to host and port, resolving with the supplied host and bound port.
+ * Port 0 lets the OS choose a port. Rejects on listen errors or an unavailable
+ * TCP address; the server remains running after a successful bind.
+ */
 export async function listen(server, host, port) {
   await new Promise((resolve, reject) => {
     const onError = (error) => { server.off('listening', onListening); reject(error); };
@@ -56,4 +68,5 @@ export async function listen(server, host, port) {
   if (!address || typeof address === 'string') throw new Error('Unable to determine the dev server address.');
   return { host, port: address.port };
 }
+/** Test whether metaUrl matches the resolved entry script, defaulting to process.argv[1]. */
 export function isDirectExecution(metaUrl, argvEntry = process.argv[1]) { return Boolean(argvEntry && pathToFileURL(path.resolve(argvEntry)).href === metaUrl); }
