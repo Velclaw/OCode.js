@@ -5,7 +5,8 @@ function readSource(source?: Record<string, string | undefined>): Record<string,
   return maybeProcess?.env ?? {};
 }
 export function getEnv(name: string, fallback?: string, options: EnvReadOptions = {}): string | undefined {
-  const value = readSource(options.source)[name];
+  const source = readSource(options.source);
+  const value = Object.prototype.hasOwnProperty.call(source, name) ? source[name] : undefined;
   if (value === undefined || (options.emptyIsMissing !== false && value.trim() === "")) return fallback;
   return value;
 }
