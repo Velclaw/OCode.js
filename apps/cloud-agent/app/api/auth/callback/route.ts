@@ -28,7 +28,7 @@ export async function GET(request:Request){
     const user=await userResponse.json() as GitHubUser;
     if(!user.login||!allowedGitHubLogin(user.login))return returnTo(request,"denied");
     const response=NextResponse.redirect(new URL("/",origin));
-    response.cookies.set(SESSION_COOKIE,createSessionToken(Date.now(),user.login),cookieOptions());
+    response.cookies.set(SESSION_COOKIE,createSessionToken(user.login,Date.now()),cookieOptions());
     response.cookies.set(OAUTH_STATE_COOKIE,"",{...oauthStateCookieOptions(),maxAge:0});
     return response;
   }catch{return returnTo(request,"oauth");}
