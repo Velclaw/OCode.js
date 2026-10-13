@@ -56,9 +56,11 @@ test("async helpers retry, dedupe and time out", async () => {
 });
 test("URL helpers", () => {
   assert.equal(withQuery("/docs?a=1", { a: 2, empty: null }), "/docs?a=2");
+  assert.equal(withQuery("/docs?x=1#section", { x: [2, 3], keep: false }), "/docs?x=2&x=3&keep=false#section");
   assert.equal(joinUrl("https://example.com/", "/api/", "/v1"), "https://example.com/api/v1");
+  assert.equal(joinUrl(), "");
   assert.equal(parseUrl("not a url"), null);
-  assert.equal(stripTrackingParams("https://example.com/?utm_source=x&id=2").search, "?id=2");
+  assert.equal(stripTrackingParams("https://example.com/?utm_source=x&FBCLID=abc&id=2").search, "?id=2");
 });
 test("validation and environment helpers", () => {
   assert.equal(isEmail("dev@example.com"), true);
