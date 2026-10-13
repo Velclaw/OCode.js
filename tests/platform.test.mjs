@@ -24,6 +24,8 @@ test("HTTP helpers build JSON requests and report failures", async () => {
   assert.equal(request.method, "POST");
   assert.equal(request.body, JSON.stringify({ ok: true }));
   assert.equal(new Headers(request.headers).get("x-test"), "yes");
+  assert.throws(() => jsonRequest(undefined), /not JSON-serializable/);
+  assert.throws(() => jsonRequest(() => "not JSON"), /not JSON-serializable/);
 
   const originalFetch = globalThis.fetch;
   try {
