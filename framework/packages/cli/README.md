@@ -1,0 +1,1 @@
+# @ocodejs/cli\n\nNode.js CLI for OCodejs. Commands: `ocode dev` and `ocode build`. If the project has `src/app`, dev starts the routed runtime; otherwise it serves static assets from `public/`. Node.js 18+ required.\n
