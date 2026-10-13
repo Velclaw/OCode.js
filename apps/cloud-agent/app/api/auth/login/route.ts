@@ -1,10 +1,9 @@
 import {NextResponse} from "next/server";
 import {cookieOptions,createSessionToken,safeEqual,SESSION_COOKIE} from "@/lib/auth";
 import {isSameOriginRequest} from "@/lib/request-security";
+import {loginRateLimiter} from "@/lib/login-rate-limit";
 
 export const runtime="nodejs";
-
-const attempts=new Map<string,{count:number;resetAt:number}>();
 
 export async function POST(request:Request){
   if(!isSameOriginRequest(
@@ -16,10 +15,11 @@ export async function POST(request:Request){
     return NextResponse.json({error:"Origin không hợp lệ hoặc bị thiếu."},{status:403});
   }
 
+  // X-Forwarded-For is still proxy-dependent; use a trusted proxy policy before
+  // public multi-instance exposure. The limiter itself is bounded in memory.
   const ip=(request.headers.get("x-forwarded-for")||"unknown").split(",")[0].trim();
   const now=Date.now();
-  const state=attempts.get(ip);
-  if(state&&state.resetAt>now&&state.count>=8){
+  if(loginRateLimiter.isBlocked(ip,now)){
     return NextResponse.json({error:"Quá nhiều lần thử. Hãy chờ 15 phút."},{status:429});
   }
 
@@ -33,11 +33,11 @@ export async function POST(request:Request){
   }
 
   if(!safeEqual(typeof body.password==="string"?body.password:"",expected)){
-    attempts.set(ip,{count:state&&state.resetAt>now?state.count+1:1,resetAt:now+900000});
+    loginRateLimiter.recordFailure(ip,now);
     return NextResponse.json({error:"Mật khẩu không đúng."},{status:401});
   }
 
-  attempts.delete(ip);
+  loginRateLimiter.clear(ip);
   const response=NextResponse.json({ok:true});
   response.cookies.set(SESSION_COOKIE,createSessionToken(),cookieOptions());
   return response;
