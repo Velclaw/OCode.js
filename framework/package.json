@@ -1,0 +1,19 @@
+{
+  "name": "ocodejs-framework",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OCodejs full-stack framework monorepo",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.mjs",
+    "test:cli": "node --test packages/cli/test/*.test.mjs",
+    "dev:example": "node packages/cli/src/index.js dev --root examples/basic",
+    "build:example": "node packages/cli/src/index.js build --root examples/basic",
+    "test:router": "node --test packages/router/test/*.test.mjs",
+    "test:core": "node --test packages/core/test/*.test.mjs",
+    "dev:app": "node packages/cli/src/index.js dev --root examples/routed-app"
+  },
+  "dependencies": { "@ocodejs/router": "*" }
+}
