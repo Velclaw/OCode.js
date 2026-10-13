@@ -1,0 +1,39 @@
+name: Cloud Agent MVP
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/cloud-agent/**"
+      - ".github/workflows/cloud-agent-mvp.yml"
+  push:
+    branches: [feat/cloud-agent-mobile-mvp]
+    paths:
+      - "apps/cloud-agent/**"
+      - ".github/workflows/cloud-agent-mvp.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/cloud-agent
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/cloud-agent/package.json
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        run: npm test
+      - name: TypeScript check
+        run: npm run typecheck
+      - name: Production build
+        run: npm run build
