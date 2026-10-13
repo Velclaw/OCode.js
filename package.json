@@ -1,0 +1,25 @@
+{
+  "name":"ocode-js","version":"0.1.0",
+  "description":"A lightweight, dependency-free JavaScript and TypeScript utility toolkit for modern web applications.",
+  "license":"MIT","type":"module","sideEffects":false,
+  "main":"./dist/index.js","types":"./dist/index.d.ts",
+  "exports":{
+    ".":{"types":"./dist/index.d.ts","import":"./dist/index.js"},
+    "./string":{"types":"./dist/string.d.ts","import":"./dist/string.js"},
+    "./object":{"types":"./dist/object.d.ts","import":"./dist/object.js"},
+    "./async":{"types":"./dist/async.d.ts","import":"./dist/async.js"},
+    "./url":{"types":"./dist/url.d.ts","import":"./dist/url.js"},
+    "./validation":{"types":"./dist/validation.d.ts","import":"./dist/validation.js"},
+    "./http":{"types":"./dist/http.d.ts","import":"./dist/http.js"},
+    "./browser":{"types":"./dist/browser.d.ts","import":"./dist/browser.js"},
+    "./env":{"types":"./dist/env.d.ts","import":"./dist/env.js"},
+    "./logger":{"types":"./dist/logger.d.ts","import":"./dist/logger.js"}
+  },
+  "files":["dist","README.md","LICENSE"],
+  "scripts":{"clean":"node -e \"import('node:fs').then(fs=>fs.rmSync('dist',{recursive:true,force:true}))\"","build":"npm run clean && tsc -p tsconfig.json","test":"npm run build && node --test tests/*.test.mjs","prepack":"npm run build"},
+  "keywords":["javascript","typescript","utilities","web","nextjs","developer-tools"],
+  "engines":{"node":">=18"},"devDependencies":{"typescript":"^5.8.3"},
+  "repository":{"type":"git","url":"https://github.com/Velclaw/OCode.js.git"},
+  "bugs":{"url":"https://github.com/Velclaw/OCode.js/issues"},
+  "homepage":"https://github.com/Velclaw/OCode.js#readme"
+}
