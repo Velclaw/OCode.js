@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+  <title id="title">OCode.js</title>
+  <desc id="desc">OCode.js wordmark with a geometric blue O icon and JavaScript accent.</desc>
+  <defs>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#72B7FF"/>
+      <stop offset="1" stop-color="#3478F6"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M126 47 196 87 196 167 126 207 56 167 56 87Z" stroke="url(#blue)" stroke-width="15"/>
+    <path d="M126 78 169 103 169 151 126 176 83 151 83 103Z" stroke="currentColor" stroke-width="10" opacity=".9"/>
+    <path d="M112 125h28m-14-14v28" stroke="url(#blue)" stroke-width="9"/>
+  </g>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-weight="760" letter-spacing="-3">
+    <text x="235" y="151" font-size="102" fill="currentColor">OCODE</text>
+    <text x="601" y="151" font-size="102" fill="url(#blue)">.JS</text>
+  </g>
+  <path d="M239 183H720" stroke="url(#blue)" stroke-width="4" stroke-linecap="round" opacity=".75"/>
+  <text x="240" y="220" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="550" letter-spacing="5" fill="currentColor" opacity=".65">BUILD CLEAR. SHIP CONFIDENTLY.</text>
+</svg>
