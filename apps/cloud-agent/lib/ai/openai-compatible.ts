@@ -14,7 +14,7 @@ function readConfig(): ProviderConfig | null {
     throw new Error("AI_BASE_URL must use HTTPS outside local development.");
   }
   if (parsed.username || parsed.password || parsed.search || parsed.hash) throw new Error("AI_BASE_URL must not contain credentials, query parameters, or fragments.");
-  return { baseUrl: rawBaseUrl.replace(/\\/+$/, ""), apiKey, model, provider: process.env.AI_PROVIDER?.trim() || "openai-compatible" };
+  return { baseUrl: rawBaseUrl.replace(/\/+$/, ""), apiKey, model, provider: process.env.AI_PROVIDER?.trim() || "openai-compatible" };
 }
 
 export function isAiConfigured(): boolean {
