@@ -13,9 +13,9 @@ export function pick<T extends object, K extends keyof T>(value: T, keys: readon
 /** Omit selected own enumerable properties from an object. */
 export function omit<T extends object, K extends keyof T>(value: T, keys: readonly K[]): Omit<T, K> {
   const excluded = new Set<PropertyKey>(keys);
-  const result = {} as Omit<T, K>;
-  for (const key of Object.keys(value) as Array<keyof T>) if (!excluded.has(key)) result[key] = value[key] as Omit<T, K>[typeof key];
-  return result;
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(value)) if (!excluded.has(key)) result[key] = (value as Record<string, unknown>)[key];
+  return result as Omit<T, K>;
 }
 /** Recursively merge plain objects; arrays and other values are replaced. */
 export function deepMerge<T extends PlainRecord, U extends PlainRecord>(target: T, source: U): T & U {
