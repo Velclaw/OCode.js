@@ -20,7 +20,13 @@ export function omit<T extends object, K extends keyof T>(value: T, keys: readon
 /** Recursively merge plain objects; arrays and other values are replaced. */
 export function deepMerge<T extends PlainRecord, U extends PlainRecord>(target: T, source: U): T & U {
   const result: PlainRecord = { ...target };
-  for (const [key, value] of Object.entries(source)) result[key] = isPlainObject(result[key]) && isPlainObject(value) ? deepMerge(result[key] as PlainRecord, value) : value;
+  for (const [key, value] of Object.entries(source)) {
+    const merged = isPlainObject(result[key]) && isPlainObject(value)
+      ? deepMerge(result[key] as PlainRecord, value)
+      : value;
+    // Define an own data property so a JSON "__proto__" key cannot mutate the result prototype.
+    Object.defineProperty(result, key, { value: merged, enumerable: true, configurable: true, writable: true });
+  }
   return result as T & U;
 }
 /** Safely read a nested property using a dot-separated path. */
