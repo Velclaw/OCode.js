@@ -1,0 +1,20 @@
+name: Package OCodejs framework ZIP
+on:
+  push:
+    paths: ['framework/**']
+  pull_request:
+    paths: ['framework/**']
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create source archive
+        run: zip -qr ocodejs-framework-source.zip framework -x 'framework/**/node_modules/*' 'framework/**/dist/*'
+      - name: Upload archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocodejs-framework-source
+          path: ocodejs-framework-source.zip
+          if-no-files-found: error
+          retention-days: 90
