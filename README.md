@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f8cff.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D18-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-[English](#english) · [Tiếng Việt](#tiếng-việt) · [Logo preview](assets/logo-preview.html)
+[English](#english) · [Tiếng Việt](#tiếng-việt) · [API reference](docs/API.md) · [Logo preview](assets/logo-preview.html)
 
 </div>
 
@@ -29,7 +29,7 @@ OCode.js provides small, composable helpers for common application tasks without
 - **Objects:** pick, omit, plain-object checks, recursive merge, nested-path reads, JSON cloning.
 - **Async:** sleep with abort support, retry with exponential backoff, async deduplication, timeouts.
 - **URLs:** query parameter updates, URL joining, safe parsing, tracking-parameter removal.
-- **Validation:** email/HTTP URL checks, record checks, numeric ranges and assertion helpers.
+- **Validation:** email/HTTP URL checks, record/range checks, assertion helpers.
 - **HTTP:** typed JSON fetch, JSON headers and request helpers.
 - **Browser storage:** guarded localStorage access and JSON read/write helpers.
 - **Environment:** read required/optional values and parse booleans/integers.
@@ -72,7 +72,7 @@ console.log({ slug, docs, valid: isHttpUrl(docs), result });
 
 ### Import specific modules
 
-~~~ts
+~~~
 import { slugify } from "ocode-js/string";
 import { deepMerge } from "ocode-js/object";
 import { retry, withTimeout } from "ocode-js/async";
@@ -85,6 +85,8 @@ import { fetchJson } from "ocode-js/http";
 OCode.js does not require Next.js and does not replace Next.js or Vercel. It is a small utility package that can be used inside a Next.js project. Most helpers are safe for server-side use; browser storage helpers must only be called in the browser. See the [Next.js example](examples/nextjs/README.md).
 
 ### API reference
+
+Full module descriptions and safety notes are in the [API reference](docs/API.md).
 
 | Module | Exports |
 | --- | --- |
@@ -102,7 +104,7 @@ OCode.js does not require Next.js and does not replace Next.js or Vercel. It is 
 
 Requirements: Node.js 18 or newer and npm.
 
-~~~bash
+~~~
 npm install
 npm test
 npm run build
@@ -115,9 +117,11 @@ Tests use Node's built-in test runner. CI builds the package and runs the test s
 - [x] Establish project structure and brand assets
 - [x] Implement initial TypeScript utility modules
 - [x] Add automated tests and CI workflow
-- [ ] Add API documentation and coverage reporting
-- [ ] Review package naming and publish to npm
-- [ ] Add release automation and semantic versioning
+- [x] Add initial API reference
+- [x] Add tag-triggered npm release workflow
+- [ ] Verify npm package-name availability and configure the `NPM_TOKEN` repository secret
+- [ ] Run the release checklist and publish the first version
+- [ ] Add broader API test coverage and coverage reporting
 
 ### Security
 
@@ -150,7 +154,7 @@ OCode.js là bộ tiện ích JavaScript/TypeScript gọn nhẹ, không có depe
 
 Gói chưa được phát hành lên npm. Hiện tại, clone repository và chạy:
 
-~~~bash
+~~~
 git clone https://github.com/Velclaw/OCode.js.git
 cd OCode.js
 npm install
@@ -163,6 +167,10 @@ Khi phát hành npm thành công, hướng dẫn cài đặt bằng npm install 
 
 OCode.js **không thay thế Next.js hoặc Vercel**; đây là bộ tiện ích có thể nhập vào dự án Next.js. Các tiện ích thông thường có thể dùng phía server. Chỉ gọi hàm localStorage ở phía trình duyệt.
 
+### Tài liệu API
+
+Xem [tài liệu API đầy đủ](docs/API.md) để biết các module, hàm chính và lưu ý an toàn.
+
 ### Phát triển
 
 Yêu cầu Node.js 18+ và npm. Chạy npm install, sau đó npm test để build TypeScript và chạy kiểm thử.
@@ -172,9 +180,11 @@ Yêu cầu Node.js 18+ và npm. Chạy npm install, sau đó npm test để buil
 - [x] Tạo cấu trúc dự án và tài nguyên thương hiệu
 - [x] Viết các module tiện ích TypeScript ban đầu
 - [x] Bổ sung kiểm thử và CI
-- [ ] Hoàn thiện tài liệu API và báo cáo coverage
-- [ ] Rà soát tên package và phát hành npm
-- [ ] Tự động hóa release và semantic versioning
+- [x] Bổ sung tài liệu API ban đầu
+- [x] Tạo workflow phát hành npm theo tag
+- [ ] Xác minh tên package npm và cấu hình secret repository `NPM_TOKEN`
+- [ ] Chạy checklist release và phát hành phiên bản đầu tiên
+- [ ] Mở rộng kiểm thử API và báo cáo coverage
 
 ### Bảo mật
 
