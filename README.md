@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ocode-logo.svg" alt="OCode.js" width="420" />
+<img src="assets/ocode-logo.gif" alt="OCode.js animated logo" width="420" />
 
 # OCode.js
 
@@ -41,7 +41,7 @@ When the package implementation is ready, this section will include verified ins
 ### 🧭 Roadmap
 
 - [x] Establish project README and brand assets
-- [x] Add a responsive animated logo preview
+- [x] Add SVG, animated GIF, and responsive logo preview
 - [ ] Define package scope and supported runtimes
 - [ ] Publish API design and examples
 - [ ] Add automated tests, linting, and CI
@@ -84,7 +84,7 @@ Repository hiện là bộ khung dự án và nhận diện thương hiệu; ch�
 ### Lộ trình
 
 - [x] Tạo README và tài nguyên thương hiệu
-- [x] Tạo trang xem trước logo thích ứng màn hình
+- [x] Tạo logo SVG, GIF động và trang xem trước
 - [ ] Chốt phạm vi package và môi trường hỗ trợ
 - [ ] Công bố thiết kế API và ví dụ
 - [ ] Bổ sung kiểm thử tự động, lint và CI
@@ -102,6 +102,6 @@ Dự án sử dụng giấy phép MIT. Xem [LICENSE](LICENSE).
 
 ## 🎨 Brand assets
 
-- [SVG logo](assets/ocode-logo.svg) — vector logo with transparent background.
-- [Animated logo preview](assets/logo-preview.html) — responsive logo animation with light/dark mode.
-- A GIF export can be added after the final animation timing and frame style are approved.
+- [Animated GIF logo](assets/ocode-logo.gif) — animated wordmark for README and social previews.
+- [SVG logo](assets/ocode-logo.svg) — vector wordmark with a transparent background.
+- [Logo preview](assets/logo-preview.html) — responsive animation with light/dark mode and reduced-motion support.
