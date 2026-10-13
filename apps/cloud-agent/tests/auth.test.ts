@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {createHmac} from "node:crypto";
 import {allowedGitHubLogin,createSessionToken,getSessionLogin,verifySessionToken} from "../lib/auth";
 
 process.env.SESSION_SECRET="test-only-session-secret-with-more-than-32-characters";
@@ -22,7 +23,6 @@ test("rejects expired, altered, and missing session tokens",()=>{
 test("rejects legacy password-admin session tokens",()=>{
   const now=1_800_000_000_000;
   const payload=Buffer.from(JSON.stringify({sub:"admin",exp:now+60_000})).toString("base64url");
-  const {createHmac}=require("node:crypto") as typeof import("node:crypto");
   const token=payload+"."+createHmac("sha256",process.env.SESSION_SECRET!).update(payload).digest("base64url");
   assert.equal(verifySessionToken(token,now),false);
 });
