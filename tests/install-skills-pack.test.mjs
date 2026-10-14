@@ -96,10 +96,10 @@ test("skills workflow runs only on manual dispatch and grants repository write a
 test("skills workflow checks out its designated branch and prepares Node before installing", () => {
   assert.match(workflow, /^ {2}install-pack:\n {4}runs-on: ubuntu-latest$/m);
   assert.equal(steps.length, 4);
-  assert.match(steps[0], /^ {8}uses: actions\/checkout@v4$/m);
+  assert.match(steps[0], /^ {8}uses: actions\/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4\.2\.2$/m);
   assert.match(steps[0], new RegExp(`^ {10}ref: ${branch}$`, "m"));
   assert.match(steps[0], /^ {10}persist-credentials: true$/m);
-  assert.match(steps[1], /^ {8}uses: actions\/setup-node@v4$/m);
+  assert.match(steps[1], /^ {8}uses: actions\/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4\.1\.0$/m);
   assert.match(steps[1], /^ {10}node-version: 22$/m);
   assert.equal(runSteps.length, 2);
   assert.equal(runSteps[0], steps[2]);
