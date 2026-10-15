@@ -1,0 +1,10 @@
+{
+  "name": "@ocodejs/router",
+  "version": "0.1.0",
+  "description": "File-system routing and route manifest generation for OCodejs",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "exports": { ".": "./src/index.js", "./scan": "./src/scan.js", "./match": "./src/match.js" },
+  "files": ["src", "README.md"],
+  "license": "MIT"
+}
