@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ocode-logo.svg" alt="OCode.js logo" width="420" />
+<img src="assets/ocode-logo.gif" alt="Animated OCode.js logo" width="420" />
 
 # OCode.js
 
