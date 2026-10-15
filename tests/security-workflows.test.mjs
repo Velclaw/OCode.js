@@ -12,8 +12,10 @@ const actionNames = {
   trivy: ["actions/checkout", "aquasecurity/trivy-action", "github/codeql-action/upload-sarif"]
 };
 
-// These five workflows each have one job. Follow the existing workflow tests'
-// scalar extraction convention, allowing both YAML sequence indentation styles.
+/**
+ * Read step scalar accessors from a single-job workflow, allowing both YAML
+ * sequence indentation styles used by the security workflows.
+ */
 function workflowSteps(name) {
   const source = readFileSync(new URL(`../.github/workflows/${name}.yml`, import.meta.url), "utf8");
   const section = source.match(/^ +steps:\r?\n([\s\S]*)$/m);
@@ -40,21 +42,29 @@ function workflowSteps(name) {
   }));
 }
 
+/**
+ * Return the unique step using the given action, asserting exactly one match.
+ */
 function actionStep(steps, action) {
   const matches = steps.filter((step) => step.has("uses") && step.value("uses").startsWith(`${action}@`));
   assert.equal(matches.length, 1, `Expected exactly one ${action} step`);
   return matches[0];
 }
 
+/**
+ * Return the unique step with the given name, asserting exactly one match.
+ */
 function namedStep(steps, name) {
   const matches = steps.filter((step) => step.has("name") && step.value("name") === name);
   assert.equal(matches.length, 1, `Expected exactly one ${name} step`);
   return matches[0];
 }
 
-// Evaluate the actual checked-in conditions, rather than copying their logic.
-// Only the string comparisons and boolean operators shared by Actions and JS
-// are supported here. This is a unit fixture, not an Actions runner emulator.
+/**
+ * Evaluate a checked-in condition against a synthetic API key and file list.
+ * Only string comparisons and boolean operators shared by Actions and JS are
+ * supported; this is a unit fixture, not an Actions runner emulator.
+ */
 function evaluateCondition(step, { apiKey = "", files = [] } = {}) {
   const condition = step.value("if").match(/^\$\{\{\s*(.*?)\s*\}\}$/);
   assert.ok(condition, "Expected an explicit Actions expression");
