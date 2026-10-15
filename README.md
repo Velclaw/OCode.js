@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/ocode-logo.svg" alt="OCode.js logo" width="420" />
+
 # OCode.js
 
 **A lightweight, dependency-free JavaScript and TypeScript utility toolkit for modern web apps.**
@@ -195,6 +197,6 @@ MIT. Xem LICENSE.
 
 ## Brand assets
 
-- **Official transparent SVG:** [OCode.js logo](https://github.com/zskbot/pages_logo/blob/main/OCode.js/ocodejs-logo.svg)
-- **Logo source repository:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo)
+- **Official logo source:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo)
+- **Logo SVG used in this README:** [assets/ocode-logo.svg](assets/ocode-logo.svg)
 - **Logo preview page:** https://zskbot.github.io/pages_logo/
