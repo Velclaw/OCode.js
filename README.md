@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg" alt="OCode.js logo — transparent SVG from zskbot/pages_logo" width="420" />
+<img src="https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg?v=19ccf949987e0aadf216581c35c20bb3d18bf71c" alt="OCode.js white logo on transparent background" width="420" />
 
 # OCode.js
 
@@ -198,6 +198,6 @@ MIT. Xem LICENSE.
 
 ## Brand assets
 
-- **Official transparent SVG:** [OCode.js logo](https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg)
+- **Official transparent SVG:** [OCode.js logo](https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg?v=19ccf949987e0aadf216581c35c20bb3d18bf71c)
 - **Logo source repository:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo)
 - **Logo preview page:** https://zskbot.github.io/pages_logo/
