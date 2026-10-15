@@ -59,11 +59,12 @@ function evaluateCondition(step, { apiKey = "", files = [] } = {}) {
   const condition = step.value("if").match(/^\$\{\{\s*(.*?)\s*\}\}$/);
   assert.ok(condition, "Expected an explicit Actions expression");
   const expression = condition[1];
-  const predicate = "(?:secrets\\.HAWK_API_KEY|hashFiles\\('[^']+'\\)) != ''";
+  const predicate = "(?:(?:secrets|env)\\.HAWK_API_KEY|hashFiles\\('[^']+'\\)) != ''";
   assert.match(expression, new RegExp(`^${predicate}(?: (?:&&|\\|\\|) ${predicate})*$`),
     "Update the condition fixture when the workflow uses another expression feature");
   return runInNewContext(expression, {
     secrets: { HAWK_API_KEY: apiKey },
+    env: { HAWK_API_KEY: apiKey },
     hashFiles: (path) => files.includes(path) ? "0123456789abcdef".repeat(4) : ""
   }, { timeout: 100 });
 }
@@ -141,6 +142,26 @@ test("StackHawk ignores similarly named files and its workflow file when the roo
   assert.equal(evaluateCondition(namedStep(steps, "Start your service"), fixture), false);
   assert.equal(evaluateCondition(actionStep(steps, "stackhawk/hawkscan-action"), fixture), false);
 });
+
+// Isolate each missing prerequisite: a combined fixture with both files absent
+// could still pass if either hashFiles check matched the wrong path.
+for (const config of [".github/workflows/stackhawk.yml", "config/stackhawk.yml", "stackhawk.yml.bak"]) {
+  test(`StackHawk skips scanning when only ${config} exists alongside the root service`, () => {
+    const steps = workflowSteps("stackhawk");
+    const fixture = { apiKey: "synthetic-api-key", files: ["your-service.sh", config] };
+    assert.equal(evaluateCondition(namedStep(steps, "Start your service"), fixture), true);
+    assert.equal(evaluateCondition(actionStep(steps, "stackhawk/hawkscan-action"), fixture), false);
+  });
+}
+
+for (const script of ["scripts/your-service.sh", "your-service.sh.bak"]) {
+  test(`StackHawk skips startup and scanning when only ${script} exists alongside the root config`, () => {
+    const steps = workflowSteps("stackhawk");
+    const fixture = { apiKey: "synthetic-api-key", files: ["stackhawk.yml", script] };
+    assert.equal(evaluateCondition(namedStep(steps, "Start your service"), fixture), false);
+    assert.equal(evaluateCondition(actionStep(steps, "stackhawk/hawkscan-action"), fixture), false);
+  });
+}
 
 test("StackHawk treats a non-empty API key as a string rather than a boolean", () => {
   const scan = actionStep(workflowSteps("stackhawk"), "stackhawk/hawkscan-action");
