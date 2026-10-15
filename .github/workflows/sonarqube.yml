@@ -10,10 +10,24 @@ permissions:
   pull-requests: read
 jobs:
   Analysis:
-    if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_HOST_URL != '' && vars.SONAR_PROJECT_KEY != '' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check SonarQube configuration
+        id: config
+        shell: bash
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+        run: |
+          if [[ -n "$SONAR_TOKEN" && -n "$SONAR_HOST_URL" && -n "$SONAR_PROJECT_KEY" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping SonarQube: required repository secrets/variable are not configured."
+          fi
       - name: Analyze with SonarQube
+        if: ${{ steps.config.outputs.configured == 'true' }}
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
