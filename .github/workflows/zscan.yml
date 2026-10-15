@@ -21,8 +21,20 @@ jobs:
       - name: Execute Gradle build
         if: ${{ hashFiles('gradlew') != '' }}
         run: ./gradlew build
+      - name: Check zScan configuration
+        id: config
+        shell: bash
+        env:
+          ZSCAN_SECRET: ${{ secrets.ZSCAN_CLIENT_SECRET }}
+        run: |
+          if [[ -n "$ZSCAN_SECRET" ]] && find . -type f -name '*.apk' -print -quit | grep -q .; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping zScan: an APK artifact and ZSCAN_CLIENT_SECRET are required."
+          fi
       - name: Run Zimperium zScan
-        if: ${{ hashFiles('**/*.apk') != '' && secrets.ZSCAN_CLIENT_SECRET != '' }}
+        if: ${{ steps.config.outputs.configured == 'true' }}
         uses: zimperium/zscanmarketplace@bfc6670f6648d796098c251ccefcfdb98983174d
         timeout-minutes: 60
         with:
