@@ -1,17 +1,14 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg?v=19ccf949987e0aadf216581c35c20bb3d18bf71c" alt="OCode.js white logo on transparent background" width="420" />
-
 # OCode.js
 
 **A lightweight, dependency-free JavaScript and TypeScript utility toolkit for modern web apps.**
 
-[![npm version](https://img.shields.io/npm/v/ocode-js.svg?label=npm)](https://www.npmjs.com/package/ocode-js)
 [![CI](https://github.com/Velclaw/OCode.js/actions/workflows/ci.yml/badge.svg)](https://github.com/Velclaw/OCode.js/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f8cff.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D18-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-[English](#english) · [Tiếng Việt](#tiếng-việt) · [API reference](docs/API.md) · [Logo preview](assets/logo-preview.html)
+[English](#english) · [Tiếng Việt](#tiếng-việt) · [API reference](docs/API.md) · [Logo preview](assets/logo-preview.html) · [Official logo SVG](https://github.com/zskbot/pages_logo/blob/main/OCode.js/ocodejs-logo.svg)
 
 </div>
 
@@ -198,6 +195,6 @@ MIT. Xem LICENSE.
 
 ## Brand assets
 
-- **Official transparent SVG:** [OCode.js logo](https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-logo.svg?v=19ccf949987e0aadf216581c35c20bb3d18bf71c)
+- **Official transparent SVG:** [OCode.js logo](https://github.com/zskbot/pages_logo/blob/main/OCode.js/ocodejs-logo.svg)
 - **Logo source repository:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo)
 - **Logo preview page:** https://zskbot.github.io/pages_logo/
