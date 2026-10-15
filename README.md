@@ -2,8 +2,6 @@
 
 <img src="assets/ocode-logo-black.gif" alt="OCode.js animated logo" width="420" />
 
-#
-
 **A lightweight, dependency-free JavaScript and TypeScript utility toolkit for modern web apps.**
 
 [![npm version](https://img.shields.io/npm/v/ocode-js.svg?label=npm)](https://www.npmjs.com/package/ocode-js)
