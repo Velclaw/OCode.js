@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/zskbot/pages_logo/main/OCode.js/ocodejs-animated-logo.gif" alt="Animated OCode.js logo" width="420" />
+<img src="https://raw.githubusercontent.com/zskbot/pages_logo/nextjs-font-wordmark/OCode.js/ocodejs-logo.svg" alt="OCode.js logo" width="420" />
 
 # OCode.js
 
@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f8cff.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D18-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
 
-[English](#english) · [Tiếng Việt](#tiếng-việt) · [API reference](docs/API.md) · [Logo preview](assets/logo-preview.html) · [Official logo SVG](https://github.com/zskbot/pages_logo/blob/main/OCode.js/ocodejs-logo.svg)
+[English](#english) · [Tiếng Việt](#tiếng-việt) · [API reference](docs/API.md) · [Animated logo preview](https://github.com/zskbot/pages_logo/blob/nextjs-font-wordmark/OCode.js/ocodejs-logo.html) · [Official logo SVG](https://github.com/zskbot/pages_logo/blob/nextjs-font-wordmark/OCode.js/ocodejs-logo.svg)
 
 </div>
 
@@ -197,6 +197,6 @@ MIT. Xem LICENSE.
 
 ## Brand assets
 
-- **Official logo source:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo)
-- **Logo SVG used in this README:** [assets/ocode-logo.svg](assets/ocode-logo.svg)
-- **Logo preview page:** https://zskbot.github.io/pages_logo/
+- **Logo source and preview:** [zskbot/pages_logo](https://github.com/zskbot/pages_logo/tree/nextjs-font-wordmark/OCode.js)
+- **Logo SVG shown above:** [ocodejs-logo.svg](https://github.com/zskbot/pages_logo/blob/nextjs-font-wordmark/OCode.js/ocodejs-logo.svg)
+- **Animated HTML preview:** [ocodejs-logo.html](https://github.com/zskbot/pages_logo/blob/nextjs-font-wordmark/OCode.js/ocodejs-logo.html)
