@@ -1,22 +1,16 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# Black Duck Security Action allows you to integrate Static Analysis Security Testing (SAST) and Software Composition Analysis (SCA) into your CI/CD pipelines.
-# For more information about configuring your workflow,
-# read our documentation at https://github.com/blackduck-inc/black-duck-security-scan
-
+# This workflow uses a third-party security scanning action.
 name: CI Black Duck security scan
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: '31 13 * * 0'
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -26,29 +20,34 @@ jobs:
       pull-requests: write
       security-events: write
       actions: read
-
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check Black Duck configuration
+        id: config
+        shell: bash
+        env:
+          BLACKDUCK_URL: ${{ vars.BLACKDUCKSCA_URL }}
+          BLACKDUCK_TOKEN: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+        run: |
+          if [[ -n "$BLACKDUCK_URL" && -n "$BLACKDUCK_TOKEN" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping Black Duck scan: BLACKDUCKSCA_URL variable and BLACKDUCKSCA_TOKEN secret are required."
+          fi
       - name: Black Duck SCA scan
+        if: ${{ steps.config.outputs.configured == 'true' }}
         uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
         with:
-          ### ---------- BLACKDUCK SCA SCANNING: REQUIRED FIELDS ----------
           blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
           blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
-
-          ### ---------- COVERITY SCANNING: REQUIRED FIELDS ----------
           coverity_url: ${{ vars.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-
-          ### ---------- POLARIS SCANNING: REQUIRED FIELDS ----------
           polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_assessment_types: "SCA,SAST"
-
-          ### ---------- SRM SCANNING: REQUIRED FIELDS ----------
           srm_url: ${{ vars.SRM_URL }}
           srm_apikey: ${{ secrets.SRM_API_KEY }}
           srm_assessment_types: "SCA,SAST"
-
