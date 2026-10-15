@@ -18,6 +18,7 @@ async function importModule(file) {
  * Render a matched page with { params, request }, then wrap its HTML in layouts
  * from innermost to outermost, passing the current HTML as children.
  * A Response from any renderer is returned immediately, skipping remaining layouts.
+ * Otherwise, resolves with an HTML Response containing the final string.
  * Rejects on module or renderer errors, or with TypeError for a missing renderer
  * or a result that is neither a string nor a Response.
  */

@@ -24,7 +24,8 @@ function decodeSegment(segment, originalPath) {
  * Match a pathname or absolute URL against manifest.routes, requiring equal segment
  * counts. More static segments win; ties use pathname locale order. Returns
  * { route, params, pathname } with decoded parameters and a normalized pathname,
- * or null when no route matches. Duplicate parameter names disqualify a route.
+ * or null when no route matches. Nested percent escapes in incoming segments may
+ * be decoded twice. Duplicate parameter names disqualify a route.
  * Throws for invalid manifest/pathname input or malformed incoming encoding;
  * malformed encoding in a static route segment instead disqualifies that route.
  */
