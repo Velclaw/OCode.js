@@ -17,17 +17,10 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: ["main"]
-env:
-  AWS_ROLE: MY_ROLE # set this with the role ARN which has permissions to invoke access-analyzer:ValidatePolicy,access-analyzer:CheckNoNewAccess, access-analyzer:CheckAccessNotGranted and can be used in GitHub actions
-  REGION: MY_AWS_REGION # set this to your preferred AWS region where you plan to deploy your policies, e.g. us-west-1
-  TEMPLATE_PATH: FILE_PATH_TO_THE_TF_PLAN # set this to the file path to the terraform plan in JSON
-  ACTIONS: MY_LIST_OF_ACTIONS # set to pass list of actions in the format action1, action2,.. One of `ACTIONS` or `RESOURCES` is required if you are using `CHECK_ACCESS_NOT_GRANTED` policy-check-type.
-  RESOURCES: MY_LIST_OF_RESOURCES # set to pass list of resource ARNs in the format resource1, resource2,.. One of `ACTIONS` or `RESOURCES` is required if you are using `CHECK_ACCESS_NOT_GRANTED` policy-check-type.
-  REFERENCE_POLICY: REFERENCE_POLICY # set to pass a JSON formatted file that specifies the path to the reference policy that is used for a permissions comparison. For example, if you stored such path in a GitHub secret with name REFERENCE_IDENTITY_POLICY , you can pass ${{ secrets.REFERENCE_IDENTITY_POLICY }}. If not you have the reference policy in the repository, you can directly pass it's path. This is required if you are using `CHECK_NO_NEW_ACCESS_CHECK` policy-check-type.
-  REFERENCE_POLICY_TYPE: TYPE_OF_REFERENCE_POLICY # set to pass the policy type associated with the IAM policy under analysis and the reference policy. This is required if you are using `CHECK_NO_NEW_ACCESS_CHECK` policy-check-type.
-
 jobs:
   policy-validator:
+    # Skip safely until repository Variables contain real AWS and policy configuration.
+    if: ${{ vars.AWS_ROLE_ARN != '' && vars.AWS_REGION != '' && vars.TF_PLAN_PATH != '' && vars.IAM_ACTIONS != '' && vars.IAM_RESOURCES != '' && vars.REFERENCE_POLICY != '' && vars.REFERENCE_POLICY_TYPE != '' }}
     runs-on: ubuntu-latest # Virtual machine to run the workflow (configurable)
     #https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#updating-your-github-actions-workflow
     #https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/
@@ -44,15 +37,15 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
         with:
-          role-to-assume: ${{ env.AWS_ROLE }}
-          aws-region: ${{ env.REGION }}
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
       # Run the VALIDATE_POLICY check. More configuration details here - https://github.com/aws-actions/terraform-aws-iam-policy-validator
       - name: Run AWS AccessAnalyzer ValidatePolicy check
         id: run-aws-validate-policy
         uses: aws-actions/terraform-aws-iam-policy-validator@26797c40250bf1ee50af8996a2475b9b5a8b8927 #v1.0.2
         with:
           policy-check-type: "VALIDATE_POLICY"
-          template-path: ${{ env.TEMPLATE_PATH }}
+          template-path: ${{ vars.TF_PLAN_PATH }}
           region: ${{ env.REGION }}
       # Print result from VALIDATE_POLICY check
       - name: Print the result for ValidatePolicy check
@@ -65,8 +58,8 @@ jobs:
         with:
           policy-check-type: "CHECK_ACCESS_NOT_GRANTED"
           template-path: ${{ env.TEMPLATE_PATH }}
-          actions: ${{ env.ACTIONS }}
-          resources: ${{ env.RESOURCES }}
+          actions: ${{ vars.IAM_ACTIONS }}
+          resources: ${{ vars.IAM_RESOURCES }}
           region: ${{ env.REGION }}
       # Print result from CHECK_ACCESS_NOT_GRANTED check
       - name: Print the result for CheckAccessNotGranted check
@@ -80,8 +73,8 @@ jobs:
         with:
           policy-check-type: "CHECK_NO_NEW_ACCESS"
           template-path: ${{ env.TEMPLATE_PATH }}
-          reference-policy: ${{ env.REFERENCE_POLICY }}
-          reference-policy-type: ${{ env.REFERENCE_POLICY_TYPE }}
+          reference-policy: ${{ vars.REFERENCE_POLICY }}
+          reference-policy-type: ${{ vars.REFERENCE_POLICY_TYPE }}
           region: ${{ env.REGION }}
       # Print result from CHECK_NO_NEW_ACCESS check
       - name: Print the result CheckNoNewAccess check
