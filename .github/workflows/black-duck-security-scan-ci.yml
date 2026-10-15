@@ -23,8 +23,21 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check Black Duck configuration
+        id: config
+        shell: bash
+        env:
+          BLACKDUCK_URL: ${{ vars.BLACKDUCKSCA_URL }}
+          BLACKDUCK_TOKEN: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+        run: |
+          if [[ -n "$BLACKDUCK_URL" && -n "$BLACKDUCK_TOKEN" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping Black Duck scan: BLACKDUCKSCA_URL variable and BLACKDUCKSCA_TOKEN secret are required."
+          fi
       - name: Black Duck SCA scan
-        if: ${{ vars.BLACKDUCKSCA_URL != '' && secrets.BLACKDUCKSCA_TOKEN != '' }}
+        if: ${{ steps.config.outputs.configured == 'true' }}
         uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
         with:
           blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
