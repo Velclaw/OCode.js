@@ -17,8 +17,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check 42Crunch configuration
+        id: config
+        shell: bash
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          if [[ -n "$API_TOKEN" ]] && find . -type f \( -iname 'openapi*.yaml' -o -iname 'openapi*.yml' -o -iname 'openapi*.json' -o -iname 'swagger*.yaml' -o -iname 'swagger*.json' \) -print -quit | grep -q .; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping 42Crunch: API_TOKEN and an OpenAPI/Swagger spec are required."
+          fi
       - name: 42Crunch REST API Static Security Testing
-        if: ${{ secrets.API_TOKEN != '' && (hashFiles('**/openapi*.yaml') != '' || hashFiles('**/openapi*.yml') != '' || hashFiles('**/openapi*.json') != '' || hashFiles('**/swagger*.yaml') != '' || hashFiles('**/swagger*.json') != '') }}
+        if: ${{ steps.config.outputs.configured == 'true' }}
         uses: 42Crunch/api-security-audit-action@fc01ea7a89e6268875868f9d89598af7a9899ae0
         with:
           api-token: ${{ secrets.API_TOKEN }}
