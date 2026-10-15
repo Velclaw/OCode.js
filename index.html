@@ -119,8 +119,8 @@ cd OCode.js
 npm install
 npm test
 npm run build</code></pre></div>
-        <div class="codebox"><div class="code-head">TypeScript · Example</div><pre><code>import { slugify } from "./src/string";
-import { retry } from "./src/async";
+        <div class="codebox"><div class="code-head">TypeScript · Example</div><pre><code>import { slugify } from "ocode-js/string";
+import { retry } from "ocode-js/async";
 
 const slug = slugify("Build a better web");
 
@@ -129,7 +129,7 @@ const result = await retry(
   { attempts: 3, delayMs: 200 }
 );</code></pre></div>
       </div>
-      <p class="section-desc" style="margin-top:15px;font-size:12px">Lưu ý: package chưa được phát hành lên npm. Hãy dùng repository và kiểm tra hướng dẫn trong README trước khi import từ package name.</p>
+      <p class="section-desc" style="margin-top:15px;font-size:12px">Lưu ý: package chưa được phát hành lên npm. Các import ở trên yêu cầu build cục bộ hoặc liên kết package vào dự án (link); xem hướng dẫn trong README.</p>
     </div>
   </section>
   <section id="ecosystem">
@@ -138,7 +138,7 @@ const result = await retry(
       <div class="road">
         <div class="road-item"><strong>JavaScript &amp; TypeScript</strong><span>API nhỏ, kiểu dữ liệu rõ ràng</span></div>
         <div class="road-item"><strong>Node.js</strong><span>Tiện ích server và kiểm thử tích hợp</span></div>
-        <div class="road-item"><strong>Next.js</strong><span>Dùng trong ứng dụng hiện có; chú ý API chỉ chạy trên browser</span></div>
+        <div class="road-item"><strong>Next.js</strong><span>Dùng được phía server; chỉ các hàm lưu trữ trình duyệt getLocalStorage, readStorage, writeStorage và removeStorage cần chạy trên browser</span></div>
       </div>
     </div>
   </section>
